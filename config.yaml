@@ -1,0 +1,33 @@
+---
+variant: flatcar
+version: 1.0.0
+
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
+
+storage:
+  files:
+    # hostname
+    - path: /etc/hostname
+      contents:
+        inline: "akpella.lan"
+    # network
+    - path: /etc/systemd/network/00-eth0.network
+      contents:
+        inline: |
+          [Match]
+          Name=eth0
+
+          [Network]
+          DNS=1.1.1.1
+          Address=193.40.103.107/24
+          Gateway=193.40.103.1
+    - path: /etc/hosts
+      overwrite: true
+      contents:
+        inline: |
+          127.0.0.1       localhost akpella.lan
+          ::1             localhost akpella.lan
