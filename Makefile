@@ -2,6 +2,7 @@ config.json: config.yaml
 	docker run --rm -i \
 	  quay.io/coreos/butane:latest \
 	  --strict \
+	  --pretty \
 	  < config.yaml > config.json
 
 reset: config.json
