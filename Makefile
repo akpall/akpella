@@ -1,7 +1,6 @@
 config.json: config.yaml
 	docker run --rm -i \
 	  quay.io/coreos/butane:latest \
-	  --pretty \
 	  --strict \
 	  < config.yaml > config.json
 
