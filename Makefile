@@ -22,3 +22,7 @@ update:
 	VER=$$(curl -fsSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION= | cut -d = -f 2) && \
 	echo $${VER} && \
 	ssh akpella sudo flatcar-update -V $${VER} -A
+
+akpall-ignition.raw:
+	curl -Os https://github.com/akpall/sysext-bakery/blob/akpella/akpall-ignition.raw
+.PHONY: akpall-ignition.raw
