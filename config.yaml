@@ -31,3 +31,8 @@ storage:
         inline: |
           127.0.0.1       localhost akpella.lan
           ::1             localhost akpella.lan
+
+systemd:
+  units:
+    - name: systemd-sysupdate.timer
+      enabled: true
