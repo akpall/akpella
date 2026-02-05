@@ -10,7 +10,6 @@ reset: config.json
 	  echo "No config.json" && \
 	  exit 1; \
 	fi; \
-
 	ssh -o ControlMaster=auto -o ControlPath=/tmp/ssh_mux_%h_%p_%r -o ControlPersist=10m -fN akpella && \
 	TEMPDIR=$$(ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r akpella "cd /tmp && mktemp -d") && \
 	scp -o ControlPath=/tmp/ssh_mux_%h_%p_%r config.json akpella:$${TEMPDIR} && \
