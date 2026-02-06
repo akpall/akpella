@@ -9,6 +9,8 @@ passwd:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
 
 storage:
+  directories:
+    - path: /var/www/html
   files:
     # hostname
     - path: /etc/hostname
@@ -31,6 +33,21 @@ storage:
         inline: |
           127.0.0.1       localhost akpella.lan
           ::1             localhost akpella.lan
+    - path: /etc/caddy/Caddyfile
+      contents:
+        inline: |
+          fst.ee {
+            root * /var/www/html
+            file_server
+          }
+
+          matrix.fst.ee {
+            reverse_proxy localhost:8008
+          }
+    - path: /var/www/html/index.html
+      contents:
+        inline: |
+          <h1>no</h1>
 
 systemd:
   units:
@@ -56,6 +73,25 @@ systemd:
           --name=matrixdotorg-synapse \
           --mount type=volume,src=synapse-data,dst=/data \
           matrixdotorg/synapse:latest
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: caddy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        ExecStart=docker run \
+          --name=caddy \
+          --mount type=bind,src=/etc/caddy,dst=/etc/caddy \
+          --mount type=bind,src=/var/www/html,dst=/var/www/html \
+          -p 80:80 \
+          -p 443:443 \
+          caddy:latest
 
         [Install]
         WantedBy=multi-user.target
