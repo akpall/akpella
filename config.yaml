@@ -7,10 +7,13 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
+    - name: matrixdotorg-synapse
+      home_dir: /opt/matrixdotorg-synapse
 
 storage:
   directories:
     - path: /var/www/html
+    - path: /opt/matrixdotorg-synapse/data
   files:
     # hostname
     - path: /etc/hostname
@@ -65,13 +68,15 @@ systemd:
         ExecStartPre=/usr/bin/docker run \
           --name=matrixdotorg-synapse \
           --rm \
-          --mount type=volume,src=synapse-data,dst=/data \
+          --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
           -e SYNAPSE_SERVER_NAME=matrix.fst.ee \
           -e SYNAPSE_REPORT_STATS=yes \
           matrixdotorg/synapse:latest generate
         ExecStart=docker run \
           --name=matrixdotorg-synapse \
-          --mount type=volume,src=synapse-data,dst=/data \
+          --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
+          -p 127.0.0.1:8008:8008 \
+          -p [::1]:8008:8008 \
           matrixdotorg/synapse:latest
 
         [Install]
