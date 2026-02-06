@@ -22,7 +22,7 @@ storage:
     # hostname
     - path: /etc/hostname
       contents:
-        inline: "akpella.lan"
+        inline: "akpella.fst.ee"
     # network
     - path: /etc/systemd/network/00-eth0.network
       contents:
@@ -38,8 +38,8 @@ storage:
       overwrite: true
       contents:
         inline: |
-          127.0.0.1       localhost akpella.lan
-          ::1             localhost akpella.lan
+          127.0.0.1       localhost akpella.fst.ee
+          ::1             localhost akpella.fst.ee
     - path: /opt/caddy/etc/caddy/Caddyfile
       contents:
         inline: |
