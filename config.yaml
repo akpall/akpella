@@ -63,8 +63,6 @@ storage:
 
 systemd:
   units:
-    - name: systemd-sysupdate.timer
-      enabled: true
     - name: matrixdotorg-synapse.service
       enabled: true
       contents: |
