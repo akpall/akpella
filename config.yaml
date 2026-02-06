@@ -9,10 +9,14 @@ passwd:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
     - name: matrixdotorg-synapse
       home_dir: /opt/matrixdotorg-synapse
+    - name: caddy
+      home_dir: /opt/caddy
 
 storage:
   directories:
-    - path: /var/www/html
+    - path: /opt/caddy/data
+    - path: /opt/caddy/etc/caddy
+    - path: /opt/caddy/var/www/html
     - path: /opt/matrixdotorg-synapse/data
   files:
     # hostname
@@ -36,18 +40,23 @@ storage:
         inline: |
           127.0.0.1       localhost akpella.lan
           ::1             localhost akpella.lan
-    - path: /etc/caddy/Caddyfile
+    - path: /opt/caddy/etc/caddy/Caddyfile
       contents:
         inline: |
+          {
+            acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+            email akpall+akpella@fst.ee
+          }
+
           fst.ee {
             root * /var/www/html
             file_server
           }
 
           matrix.fst.ee {
-            reverse_proxy localhost:8008
+            reverse_proxy http://[::1]:8008
           }
-    - path: /var/www/html/index.html
+    - path: /opt/caddy/var/www/html/index.html
       contents:
         inline: |
           <h1>no</h1>
@@ -92,8 +101,9 @@ systemd:
         [Service]
         ExecStart=docker run \
           --name=caddy \
-          --mount type=bind,src=/etc/caddy,dst=/etc/caddy \
-          --mount type=bind,src=/var/www/html,dst=/var/www/html \
+          --mount type=bind,src=/opt/caddy/etc/caddy,dst=/etc/caddy \
+          --mount type=bind,src=/opt/caddy/var/www/html,dst=/var/www/html \
+          --mount type=bind,src=/opt/caddy/data,dst=/data \
           -p 80:80 \
           -p 443:443 \
           caddy:latest
