@@ -41,6 +41,7 @@ storage:
           127.0.0.1       localhost akpella.fst.ee
           ::1             localhost akpella.fst.ee
     - path: /opt/caddy/etc/caddy/Caddyfile
+      overwrite: true
       contents:
         inline: |
           {
@@ -57,6 +58,7 @@ storage:
             reverse_proxy http://[::1]:8008
           }
     - path: /opt/caddy/var/www/html/index.html
+      overwrite: true
       contents:
         inline: |
           <h1>no</h1>
