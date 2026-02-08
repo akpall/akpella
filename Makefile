@@ -6,7 +6,7 @@ config.json: config.yaml
 	  < config.yaml > config.json
 
 .reset: config.json
-	rm .reset
+	-rm .reset
 	ssh -o ControlMaster=auto -o ControlPath=/tmp/ssh_mux_%h_%p_%r -o ControlPersist=10s -fN akpella && \
 	TEMPDIR=$$(ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r akpella "cd /tmp && mktemp -d") && \
 	scp -o ControlPath=/tmp/ssh_mux_%h_%p_%r config.json akpella:$${TEMPDIR} && \
