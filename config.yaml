@@ -54,8 +54,13 @@ storage:
             file_server
           }
 
+          fst.ee:8448 {
+            reverse_proxy /_matrix/* matrixdotorg-synapse:8008
+          }
+
           matrix.fst.ee {
-            reverse_proxy http://[::1]:8008
+            reverse_proxy /_matrix/* matrixdotorg-synapse:8008
+            reverse_proxy /_synapse/client/* matrixdotorg-synapse:8008
           }
     - path: /opt/caddy/var/www/html/index.html
       overwrite: true
