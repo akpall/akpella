@@ -17,7 +17,7 @@ reset: config.json
 	  sudo flatcar-reset \
 	  --ignition-file $${TEMPDIR}/config.json \
 	  --keep-machine-id \
-	  --keep-paths '/etc/ssh/ssh_host_.*' /var/log && \
+	  --keep-paths '/etc/ssh/ssh_host_.*' '/opt/caddy/' '/opt/matrixdotorg-synapse/' /var/log && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r akpella \
 	  sudo systemctl reboot && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r -O exit akpella;
