@@ -65,17 +65,35 @@ storage:
 
 systemd:
   units:
-    - name: matrixdotorg-synapse.service
+    - name: docker-network-setup.service
       enabled: true
       contents: |
         [Unit]
-        Description=Synapse: Matrix homeserver written in Python/Twisted + Rust
+        Description=Create docker network: caddy-network
         After=docker.service
         Requires=docker.service
 
         [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/bin/docker network create caddy-network
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-matrixdotorg-synapse.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Synapse: Matrix homeserver written in Python/Twisted + Rust
+        After=docker.service \
+              docker-network-setup
+        Requires=docker.service \
+                 docker-network-setup
+
+        [Service]
         ExecStartPre=/usr/bin/docker run \
           --name=matrixdotorg-synapse \
+          --network=caddy-network \
           --rm \
           --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
           -e SYNAPSE_SERVER_NAME=matrix.fst.ee \
@@ -83,31 +101,34 @@ systemd:
           matrixdotorg/synapse:latest generate
         ExecStart=docker run \
           --name=matrixdotorg-synapse \
+          --network=caddy-network \
           --rm \
           --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
-          -p 127.0.0.1:8008:8008 \
-          -p [::1]:8008:8008 \
           matrixdotorg/synapse:latest
 
         [Install]
         WantedBy=multi-user.target
-    - name: caddy.service
+    - name: docker-caddy.service
       enabled: true
       contents: |
         [Unit]
         Description=Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.
-        After=docker.service
-        Requires=docker.service
+        After=docker.service \
+              docker-network-setup
+        Requires=docker.service \
+                 docker-network-setup
 
         [Service]
         ExecStart=docker run \
           --name=caddy \
+          --network=caddy-network \
           --rm \
           --mount type=bind,src=/opt/caddy/etc/caddy,dst=/etc/caddy \
           --mount type=bind,src=/opt/caddy/var/www/html,dst=/var/www/html \
           --mount type=bind,src=/opt/caddy/data,dst=/data \
           -p 80:80 \
           -p 443:443 \
+          -p 8448:8448 \
           caddy:latest
 
         [Install]
