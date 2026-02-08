@@ -83,6 +83,7 @@ systemd:
           matrixdotorg/synapse:latest generate
         ExecStart=docker run \
           --name=matrixdotorg-synapse \
+          --rm \
           --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
           -p 127.0.0.1:8008:8008 \
           -p [::1]:8008:8008 \
@@ -101,6 +102,7 @@ systemd:
         [Service]
         ExecStart=docker run \
           --name=caddy \
+          --rm \
           --mount type=bind,src=/opt/caddy/etc/caddy,dst=/etc/caddy \
           --mount type=bind,src=/opt/caddy/var/www/html,dst=/var/www/html \
           --mount type=bind,src=/opt/caddy/data,dst=/data \
