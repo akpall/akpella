@@ -1,8 +1,11 @@
 config.json: config.yaml
 	docker run --rm -i \
+	  --volume ${PWD}:/pwd \
+	  --workdir /pwd \
 	  quay.io/coreos/butane:latest \
 	  --strict \
 	  --pretty \
+	  --files-dir files \
 	  < config.yaml > config.json
 
 .reset: config.json
