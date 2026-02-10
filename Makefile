@@ -5,6 +5,11 @@ default:
 	$(MAKE) config.json
 .PHONY: default
 
+reset:
+	$(MAKE) default
+	$(MAKE) .reset
+.PHONY: reset
+
 .generate-files-list: $(FILES)
 	if ! echo $(FILES) | diff -q .files-list - >/dev/null 2>&1; then \
 	  echo $(FILES) > .files-list; \
@@ -35,9 +40,6 @@ config.json: config.yaml .files-list $(FILES)
 	  sudo systemctl reboot && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r -O exit akpella;
 	touch .reset
-
-reset: .reset
-.PHONY: reset
 
 update:
 	VER=$$(curl -fsSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION= | cut -d = -f 2) && \
