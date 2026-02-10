@@ -1,0 +1,25 @@
+[Unit]
+Description=Synapse: Matrix homeserver written in Python/Twisted + Rust
+After=docker.service \
+      docker-network-setup
+Requires=docker.service \
+         docker-network-setup
+
+[Service]
+ExecStartPre=/usr/bin/docker run \
+  --name=matrixdotorg-synapse \
+  --network=caddy-network \
+  --rm \
+  --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
+  -e SYNAPSE_SERVER_NAME=matrix.fst.ee \
+  -e SYNAPSE_REPORT_STATS=yes \
+  matrixdotorg/synapse:latest generate
+ExecStart=docker run \
+  --name=matrixdotorg-synapse \
+  --network=caddy-network \
+  --rm \
+  --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
+  matrixdotorg/synapse:latest
+
+[Install]
+WantedBy=multi-user.target

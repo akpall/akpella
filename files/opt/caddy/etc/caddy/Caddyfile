@@ -1,0 +1,18 @@
+{
+  #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  email akpall+akpella@fst.ee
+}
+
+fst.ee {
+  root * /var/www/html
+  file_server
+}
+
+fst.ee:8448 {
+  reverse_proxy /_matrix/* matrixdotorg-synapse:8008
+}
+
+matrix.fst.ee {
+  reverse_proxy /_matrix/* matrixdotorg-synapse:8008
+  reverse_proxy /_synapse/client/* matrixdotorg-synapse:8008
+}

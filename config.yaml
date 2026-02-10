@@ -26,42 +26,15 @@ storage:
     # network
     - path: /etc/systemd/network/00-eth0.network
       contents:
-        inline: |
-          [Match]
-          Name=eth0
-
-          [Network]
-          DNS=1.1.1.1
-          Address=193.40.103.107/24
-          Gateway=193.40.103.1
+        local: etc/systemd/network/00-eth0.network
     - path: /etc/hosts
       overwrite: true
       contents:
-        inline: |
-          127.0.0.1       localhost akpella.fst.ee
-          ::1             localhost akpella.fst.ee
+        local: etc/hosts
     - path: /opt/caddy/etc/caddy/Caddyfile
       overwrite: true
       contents:
-        inline: |
-          {
-            #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
-            email akpall+akpella@fst.ee
-          }
-
-          fst.ee {
-            root * /var/www/html
-            file_server
-          }
-
-          fst.ee:8448 {
-            reverse_proxy /_matrix/* matrixdotorg-synapse:8008
-          }
-
-          matrix.fst.ee {
-            reverse_proxy /_matrix/* matrixdotorg-synapse:8008
-            reverse_proxy /_synapse/client/* matrixdotorg-synapse:8008
-          }
+        local: opt/caddy/etc/caddy/Caddyfile
     - path: /opt/caddy/var/www/html/index.html
       overwrite: true
       contents:
@@ -72,69 +45,10 @@ systemd:
   units:
     - name: docker-network-setup.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=Create docker network: caddy-network
-        After=docker.service
-        Requires=docker.service
-
-        [Service]
-        Type=oneshot
-        RemainAfterExit=yes
-        ExecStart=/usr/bin/docker network create caddy-network
-
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: docker-network-setup.service
     - name: docker-matrixdotorg-synapse.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=Synapse: Matrix homeserver written in Python/Twisted + Rust
-        After=docker.service \
-              docker-network-setup
-        Requires=docker.service \
-                 docker-network-setup
-
-        [Service]
-        ExecStartPre=/usr/bin/docker run \
-          --name=matrixdotorg-synapse \
-          --network=caddy-network \
-          --rm \
-          --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
-          -e SYNAPSE_SERVER_NAME=matrix.fst.ee \
-          -e SYNAPSE_REPORT_STATS=yes \
-          matrixdotorg/synapse:latest generate
-        ExecStart=docker run \
-          --name=matrixdotorg-synapse \
-          --network=caddy-network \
-          --rm \
-          --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
-          matrixdotorg/synapse:latest
-
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: docker-matrixdotorg-synapse.service
     - name: docker-caddy.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.
-        After=docker.service \
-              docker-network-setup
-        Requires=docker.service \
-                 docker-network-setup
-
-        [Service]
-        ExecStart=docker run \
-          --name=caddy \
-          --network=caddy-network \
-          --rm \
-          --mount type=bind,src=/opt/caddy/etc/caddy,dst=/etc/caddy \
-          --mount type=bind,src=/opt/caddy/var/www/html,dst=/var/www/html \
-          --mount type=bind,src=/opt/caddy/data,dst=/data \
-          -p 80:80 \
-          -p 443:443 \
-          -p 8448:8448 \
-          caddy:latest
-
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: docker-caddy.service

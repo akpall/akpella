@@ -1,0 +1,12 @@
+[Unit]
+Description=Create docker network: caddy-network
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker network create caddy-network
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,22 @@
+[Unit]
+Description=Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.
+After=docker.service \
+      docker-network-setup
+Requires=docker.service \
+         docker-network-setup
+
+[Service]
+ExecStart=docker run \
+  --name=caddy \
+  --network=caddy-network \
+  --rm \
+  --mount type=bind,src=/opt/caddy/etc/caddy,dst=/etc/caddy \
+  --mount type=bind,src=/opt/caddy/var/www/html,dst=/var/www/html \
+  --mount type=bind,src=/opt/caddy/data,dst=/data \
+  -p 80:80 \
+  -p 443:443 \
+  -p 8448:8448 \
+  caddy:latest
+
+[Install]
+WantedBy=multi-user.target
