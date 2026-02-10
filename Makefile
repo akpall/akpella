@@ -1,4 +1,17 @@
-config.json: config.yaml
+FILES := $(wildcard files/*)
+
+default:
+	$(MAKE) .generate-files-list
+	$(MAKE) config.json
+.PHONY: default
+
+.generate-files-list: $(FILES)
+	if ! echo $(FILES) | diff -q .files-list - >/dev/null 2>&1; then \
+	  echo $(FILES) > .files-list; \
+	fi
+.PHONY: .generate-files-list
+
+config.json: config.yaml .files-list $(FILES)
 	docker run --rm -i \
 	  --volume ${PWD}:/pwd \
 	  --workdir /pwd \
