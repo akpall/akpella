@@ -63,3 +63,8 @@ systemd:
     - name: generate-secrets.service
       enabled: true
       contents_local: generate-secrets.service
+    # docker.service
+    - name: docker.service
+      dropins:
+        - name: docker.conf
+          contents_local: docker.conf
