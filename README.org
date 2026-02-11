@@ -1,6 +1,8 @@
-* akpella
-** Creating a matrix user
-*** Help
+* Registering a new matrix user
 #+begin_src
+# Help command
 $ docker exec -it matrixdotorg-synapse register_new_matrix_user --help
+
+# Registering a new user
+$ docker exec -it matrixdotorg-synapse register_new_matrix_user -u ${USERNAME} -c /data/homserver.yaml
 #+end_src
