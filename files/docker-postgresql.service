@@ -1,0 +1,16 @@
+[Unit]
+Description=The PostgreSQL object-relational database system provides reliability and data integrity.
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/home/core/postgresql/secret
+ExecStart=docker run \
+  --network=postgresql-network \
+  --name=postgresql \
+  --rm \
+  -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
+  postgres:latest
+
+[Install]
+WantedBy=multi-user.target

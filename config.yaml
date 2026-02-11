@@ -15,6 +15,7 @@ storage:
     - path: /home/core/caddy/var/www/html
     - path: /home/core/matrixdotorg-synapse/data
     - path: /home/core/matrixdotorg-matrix-appservice-irc/data
+    - path: /home/core/postgresql
   files:
     # /etc/hostname
     - path: /etc/hostname
@@ -63,6 +64,10 @@ systemd:
     - name: generate-secrets.service
       enabled: true
       contents_local: generate-secrets.service
+    # docker-postgresql.service
+    - name: docker-postgresql.service
+      enabled: true
+      contents_local: docker-postgresql.service
     # docker.service
     - name: docker.service
       dropins:

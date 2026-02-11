@@ -1,12 +1,12 @@
 [Unit]
-Description=Create docker network: caddy-network
+Description=Create docker networks
 After=docker.service
 Requires=docker.service
 
 [Service]
 Type=oneshot
-RemainAfterExit=yes
 ExecStart=/usr/bin/docker network create caddy-network
+ExecStart=/usr/bin/docker network create postgresql-network
 
 [Install]
 WantedBy=multi-user.target
