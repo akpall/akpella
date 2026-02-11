@@ -39,6 +39,7 @@ config.json: config.yaml .files-list $(FILES)
 	  --keep-paths '/home/core/caddy/' \
 	  --keep-paths '/home/core/matrixdotorg-synapse/' \
 	  --keep-paths '/home/core/matrixdotorg-matrix-appservice-irc' \
+	  --keep-paths '/home/core/postgresql/secret' \
 	  --keep-paths '/var/log' && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r akpella \
 	  sudo systemctl reboot && \
