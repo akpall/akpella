@@ -16,22 +16,25 @@ storage:
     - path: /home/core/matrixdotorg-synapse/data
     - path: /home/core/matrixdotorg-matrix-appservice-irc/data
   files:
-    # hostname
+    # /etc/hostname
     - path: /etc/hostname
       contents:
         inline: "akpella.fst.ee"
-    # network
+    # /etc/systemd/network/00-eth0.network
     - path: /etc/systemd/network/00-eth0.network
       contents:
         local: etc/systemd/network/00-eth0.network
+    # /etc/hosts
     - path: /etc/hosts
       overwrite: true
       contents:
         local: etc/hosts
+    # /home/core/caddy/etc/caddy/Caddyfile
     - path: /home/core/caddy/etc/caddy/Caddyfile
       overwrite: true
       contents:
         local: caddy/etc/caddy/Caddyfile
+    # /home/core/caddy/var/www/html/index.html
     - path: /home/core/caddy/var/www/html/index.html
       overwrite: true
       contents:
@@ -40,15 +43,19 @@ storage:
 
 systemd:
   units:
+    # docker-network-setup.service
     - name: docker-network-setup.service
       enabled: true
       contents_local: docker-network-setup.service
+    # docker-matrixdotorg-synapse.service
     - name: docker-matrixdotorg-synapse.service
       enabled: true
       contents_local: docker-matrixdotorg-synapse.service
+    # docker-caddy.service
     - name: docker-caddy.service
       enabled: true
       contents_local: docker-caddy.service
+    # docker-matrixdotorg-matrix-appservice-irc.service
     - name: docker-matrixdotorg-matrix-appservice-irc.service
       enabled: false
       contents_local: docker-matrixdotorg-matrix-appservice-irc.service
