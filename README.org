@@ -6,3 +6,8 @@ $ docker exec -it matrixdotorg-synapse register_new_matrix_user --help
 # Registering a new user
 $ docker exec -it matrixdotorg-synapse register_new_matrix_user -u ${USERNAME} -c /data/homserver.yaml
 #+end_src
+
+* Access postgresql database
+#+begin_src
+docker run -it --rm --network postgresql-network postgres psql -h postgresql -U postgres
+#+end_src
