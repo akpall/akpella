@@ -7,17 +7,13 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpw3cIAdtWOYUkb6UOAIcLuRzItoo4oZMzr/hzZYq4E openpgp:0xFAAA0172
-    - name: matrixdotorg-synapse
-      home_dir: /opt/matrixdotorg-synapse
-    - name: caddy
-      home_dir: /opt/caddy
 
 storage:
   directories:
-    - path: /opt/caddy/data
-    - path: /opt/caddy/etc/caddy
-    - path: /opt/caddy/var/www/html
-    - path: /opt/matrixdotorg-synapse/data
+    - path: /home/core/caddy/data
+    - path: /home/core/caddy/etc/caddy
+    - path: /home/core/caddy/var/www/html
+    - path: /home/core/matrixdotorg-synapse/data
     - path: /home/core/matrixdotorg-matrix-appservice-irc/data
   files:
     # hostname
@@ -32,11 +28,11 @@ storage:
       overwrite: true
       contents:
         local: etc/hosts
-    - path: /opt/caddy/etc/caddy/Caddyfile
+    - path: /home/core/caddy/etc/caddy/Caddyfile
       overwrite: true
       contents:
-        local: opt/caddy/etc/caddy/Caddyfile
-    - path: /opt/caddy/var/www/html/index.html
+        local: caddy/etc/caddy/Caddyfile
+    - path: /home/core/caddy/var/www/html/index.html
       overwrite: true
       contents:
         inline: |

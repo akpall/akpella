@@ -10,7 +10,7 @@ ExecStartPre=/usr/bin/docker run \
   --name=matrixdotorg-synapse \
   --network=caddy-network \
   --rm \
-  --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
+  --mount type=bind,src=/home/core/matrixdotorg-synapse/data,dst=/data \
   -e SYNAPSE_SERVER_NAME=matrix.fst.ee \
   -e SYNAPSE_REPORT_STATS=yes \
   matrixdotorg/synapse:latest generate
@@ -18,7 +18,7 @@ ExecStart=docker run \
   --name=matrixdotorg-synapse \
   --network=caddy-network \
   --rm \
-  --mount type=bind,src=/opt/matrixdotorg-synapse/data,dst=/data \
+  --mount type=bind,src=/home/core/matrixdotorg-synapse/data,dst=/data \
   matrixdotorg/synapse:latest
 
 [Install]
