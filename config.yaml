@@ -59,3 +59,7 @@ systemd:
     - name: docker-matrixdotorg-matrix-appservice-irc.service
       enabled: false
       contents_local: docker-matrixdotorg-matrix-appservice-irc.service
+    # generate-secrets.service
+    - name: generate-secrets.service
+      enabled: true
+      contents_local: generate-secrets.service
