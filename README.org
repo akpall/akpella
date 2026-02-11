@@ -1,5 +1,6 @@
-* Creating a matrix user
-** Help
+* akpella
+** Creating a matrix user
+*** Help
 #+begin_src
 $ docker exec -it matrixdotorg-synapse register_new_matrix_user --help
 #+end_src
