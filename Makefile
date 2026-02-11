@@ -35,7 +35,11 @@ config.json: config.yaml .files-list $(FILES)
 	  sudo flatcar-reset \
 	  --ignition-file $${TEMPDIR}/config.json \
 	  --keep-machine-id \
-	  --keep-paths '/etc/ssh/ssh_host_.*' '/opt/caddy/' '/opt/matrixdotorg-synapse/' /var/log && \
+	  --keep-paths '/etc/ssh/ssh_host_.*' \
+	  --keep-paths '/home/core/caddy/' \
+	  --keep-paths '/home/core/matrixdotorg-synapse/' \
+	  --keep-paths '/home/core/matrixdotorg-matrix-appservice-irc' \
+	  --keep-paths '/var/log' && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r akpella \
 	  sudo systemctl reboot && \
 	ssh -o ControlPath=/tmp/ssh_mux_%h_%p_%r -O exit akpella;

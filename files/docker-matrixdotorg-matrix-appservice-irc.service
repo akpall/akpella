@@ -1,0 +1,16 @@
+[Unit]
+Description=This is an IRC bridge for Matrix
+After=docker.service \
+      docker-matrixdotorg-synapse
+Requires=docker.service \
+         docker-matrixdotorg-synapse
+
+[Service]
+ExecStart=docker run \
+  --name=docker-matrixdotorg-matrix-appservice-irc \
+  --rm \
+  --mount type=bind,src=/home/core/matrixdotorg-matrix-appservice-irc/data,dst=/data \
+  matrixdotorg/matrix-appservice-irc:latest
+
+[Install]
+WantedBy=multi-user.target
