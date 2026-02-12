@@ -10,66 +10,47 @@ passwd:
 
 storage:
   directories:
-    - path: /home/core/caddy/data
-    - path: /home/core/caddy/etc/caddy
-    - path: /home/core/caddy/var/www/html
-    - path: /home/core/matrixdotorg-synapse/data
-    - path: /home/core/matrixdotorg-matrix-appservice-irc/data
-    - path: /home/core/postgresql
+    - path: /opt/caddy/etc/caddy
+    - path: /opt/caddy/data
   files:
     # /etc/hostname
     - path: /etc/hostname
       contents:
         inline: "akpella.fst.ee"
-    # /etc/systemd/network/00-eth0.network
-    - path: /etc/systemd/network/00-eth0.network
-      contents:
-        local: etc/systemd/network/00-eth0.network
     # /etc/hosts
     - path: /etc/hosts
       overwrite: true
       contents:
         local: etc/hosts
-    # /home/core/caddy/etc/caddy/Caddyfile
-    - path: /home/core/caddy/etc/caddy/Caddyfile
-      overwrite: true
+    # /etc/systemd/network/00-eth0.network
+    - path: /etc/systemd/network/00-eth0.network
       contents:
-        local: caddy/etc/caddy/Caddyfile
-    # /home/core/caddy/var/www/html/index.html
-    - path: /home/core/caddy/var/www/html/index.html
-      overwrite: true
+        local: etc/systemd/network/00-eth0.network
+    # /etc/flatcar/enabled-sysext.conf
+    - path: /etc/flatcar/enabled-sysext.conf
+      contents:
+        inline: |
+          podman
+          python
+    # /etc/containers/policy.json
+    - path: /etc/containers/policy.json
+      contents:
+        local: etc/containers/policy.json
+    # /etc/containers/systemd/caddy.container
+    - path: /etc/containers/systemd/caddy.container
+      contents:
+        local: etc/containers/systemd/caddy.container
+    # /opt/caddy/etc/caddy/Caddyfile
+    - path: /opt/caddy/etc/caddy/Caddyfile
+      contents:
+        local: caddy/Caddyfile
+    # /opt/caddy/var/www/html/index.html
+    - path: /opt/caddy/var/www/html/index.html
       contents:
         inline: |
           <h1>no</h1>
 
 systemd:
   units:
-    # docker-network-setup.service
-    - name: docker-network-setup.service
+    - name: caddy.service
       enabled: true
-      contents_local: docker-network-setup.service
-    # docker-matrixdotorg-synapse.service
-    - name: docker-matrixdotorg-synapse.service
-      enabled: true
-      contents_local: docker-matrixdotorg-synapse.service
-    # docker-caddy.service
-    - name: docker-caddy.service
-      enabled: true
-      contents_local: docker-caddy.service
-    # docker-matrixdotorg-matrix-appservice-irc.service
-    - name: docker-matrixdotorg-matrix-appservice-irc.service
-      enabled: false
-      contents_local: docker-matrixdotorg-matrix-appservice-irc.service
-    # generate-secrets.service
-    - name: generate-secrets.service
-      enabled: true
-      contents_local: generate-secrets.service
-    # docker-postgresql.service
-    - name: docker-postgresql.service
-      enabled: true
-      contents_local: docker-postgresql.service
-    # docker.service
-    - name: docker.service
-      dropins:
-        - name: docker.conf
-          contents_local: docker.conf
